@@ -1,5 +1,5 @@
 module UniqueNumbers
-  class RandomGenerator < Generator
+  class RandomSequentialGenerator < Generator
     store_accessor :settings, :minimum, :maximum, :max_tries, :scope
 
     after_initialize do |generator|
@@ -14,11 +14,12 @@ module UniqueNumbers
           value = SecureRandom.random_number(maximum - minimum + 1) + minimum
           now = Time.now
           model_scope = model.class
+          match_value = formatted_number(value, now).to_s[0...6]
           case scope
           when :daily
             model_scope = model_scope.where('DATE(created_at) = ?', Date.today)
           end
-          if !model_scope.exists?(attribute => formatted_number(value, now))
+          if !model_scope.where("#{attribute} ILIKE ?", "#{match_value}%").exists?
             self.last_generated_at = now
             self.save!
             model.update_columns(attribute => formatted_number(value, now))
