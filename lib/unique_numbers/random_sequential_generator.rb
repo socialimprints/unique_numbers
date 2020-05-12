@@ -13,7 +13,7 @@ module UniqueNumbers
         max_tries.times do
           value = SecureRandom.random_number(maximum - minimum + 1) + minimum
           now = Time.now
-          model_scope = model.class
+          model_scope = model.class.base_class
           match_value = formatted_number(value, now).to_s[0...6]
           case scope
           when :daily
