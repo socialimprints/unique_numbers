@@ -13,7 +13,7 @@ module UniqueNumbers
         max_tries.times do
           value = SecureRandom.random_number(maximum - minimum + 1) + minimum
           now = Time.now
-          model_scope = model.class
+          model_scope = model.class.base_class
           case scope
           when :daily
             model_scope = model_scope.where('DATE(created_at) = ?', Date.today)
