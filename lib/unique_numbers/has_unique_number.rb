@@ -42,7 +42,8 @@ module UniqueNumbers
 
     def add_active_record_callbacks
       name = @name
-      @klass.send(:after_create) { send("#{name}_generator").assign_next_number(self, name) }
+      options = @options
+      @klass.send(:after_create) { send("#{name}_generator").assign_next_number(self, name, options[:exclude_chars]) }
     end
   end
 end
