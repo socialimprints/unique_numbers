@@ -10,12 +10,14 @@ module UniqueNumbers
     def assign_next_number(model = nil, attribute = nil, exclude_chars = nil, debug = false)
       self.with_lock do
         max_tries.times do
-          alphanumric_string = if exclude_chars.present?
-                                 SecureRandom.send 'choose', (ALPHANUMERIC - exclude_chars), 5
-                               else
-                                 SecureRandom.alphanumeric(5)
-                               end
-          value = (1..9).to_a[rand(9)].to_s + alphanumric_string.upcase
+          value = ''
+          if exclude_chars.present?
+            alpha_string = SecureRandom.send 'choose', (ALPHANUMERIC - exclude_chars), 5
+            value = ((1..9).to_a - exclude_chars)[rand(9)].to_s + alpha_string.upcase
+          else
+            alpha_string = SecureRandom.alphanumeric(5)
+            value = (1..9).to_a[rand(9)].to_s + alpha_string.upcase
+          end
           now = Time.now
           model_scope = model.class.base_class
           case scope
