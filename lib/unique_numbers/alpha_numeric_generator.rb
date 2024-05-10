@@ -13,7 +13,8 @@ module UniqueNumbers
           value = ''
           if exclude_chars.present?
             alpha_string = SecureRandom.send 'choose', (ALPHANUMERIC - exclude_chars), 5
-            value = ((1..9).to_a - exclude_chars)[rand(9)].to_s + alpha_string.upcase
+            prefix_no = (1..9).to_a - exclude_chars
+            value = prefix_no[rand(prefix_no.count)].to_s + alpha_string.upcase
           else
             alpha_string = SecureRandom.alphanumeric(5)
             value = (1..9).to_a[rand(9)].to_s + alpha_string.upcase
